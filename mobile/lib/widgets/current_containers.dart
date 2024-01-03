@@ -1,5 +1,7 @@
 import 'dart:ffi';
 import 'dart:math' as math;
+import 'package:mobile/application/core/wind_value_object.dart';
+import 'package:mobile/presentation/thermomentr.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:flutter/material.dart';
@@ -7,8 +9,21 @@ import 'package:mobile/data/core/models/colors.dart';
 import 'package:mobile/data/current/models/current_weather.dart';
 
 class CurrentContainers extends StatelessWidget {
-  final CurrentWeather? weatherData;
-const CurrentContainers({ Key? key, required this.weatherData }) : super(key: key);
+  final WindValueObject wind;
+  final String windDirection;
+  final double windDegree;
+  final double uv;
+  final double pressure;
+  final double humidity;
+
+const CurrentContainers({ Key? key, 
+required this.wind,
+required this.pressure,
+required this.windDirection,
+required this.windDegree,
+required this.uv,
+required this.humidity,
+}) : super(key: key);
 
   @override
   Widget build(BuildContext context){
@@ -40,7 +55,7 @@ const CurrentContainers({ Key? key, required this.weatherData }) : super(key: ke
                       const SizedBox(height: 8,),
 
                       Text(
-                        "${weatherData?.windKph?.round()} km/h",
+                        "${wind.value.round()} km/h",
                         style:  TextStyle(
                         color: WAColors.primaryTextColor,
                         fontSize: 20,
@@ -52,7 +67,7 @@ const CurrentContainers({ Key? key, required this.weatherData }) : super(key: ke
                         child: Column(
                           
                           children: [
-                            Text("${weatherData?.windDirection}",
+                            Text("${windDirection}",
                               style:  TextStyle(
                               color: WAColors.primaryTextColor,
                               fontSize: 15,
@@ -60,7 +75,7 @@ const CurrentContainers({ Key? key, required this.weatherData }) : super(key: ke
                               ),
                             ),
                             Transform.rotate(
-                              angle: weatherData!.windDegree! * math.pi / 180,
+                              angle: windDegree * math.pi / 180,
                                 child: Icon(Icons.arrow_circle_up_outlined,
                                 color: WAColors.iconColor1,
                                 size: 70,
@@ -97,7 +112,7 @@ const CurrentContainers({ Key? key, required this.weatherData }) : super(key: ke
                         ),
                         const SizedBox(height: 25,),
                         Text(
-                        "${weatherData?.uv?.round()}",
+                        "${uv.round()}",
                         style:  TextStyle(
                         color: WAColors.primaryTextColor,
                         fontSize: 40,
@@ -112,7 +127,7 @@ const CurrentContainers({ Key? key, required this.weatherData }) : super(key: ke
                           LinearPercentIndicator(
                             width: 120,
                             lineHeight: 20,
-                            percent: weatherData!.uv!.round() / 11,
+                            percent: uv.round() / 11,
                             backgroundColor: Colors.greenAccent,
                             progressColor: Colors.green,
                             barRadius: const Radius.circular(10),
@@ -133,16 +148,62 @@ const CurrentContainers({ Key? key, required this.weatherData }) : super(key: ke
 
         Column(
           children: [
-            //Wiatr
+            //Humidyty
             Container(
               height: 190,
               width: 180,
               decoration: BoxDecoration(
                 color: WAColors.primaryColor,
                 borderRadius: const BorderRadius.all(Radius.circular(15)),),
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [ 
+                          Text(
+                              "Humidity",
+                              style:  TextStyle(
+                              color: WAColors.primaryTextColor,
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal,
+                              ),             
+                            ),
+
+                            const SizedBox(height: 25,),
+                        Text(
+                        "${humidity.round()}%",
+                        style:  TextStyle(
+                        color: WAColors.primaryTextColor,
+                        fontSize: 30,
+                        fontWeight: FontWeight.normal,
+                        ),
+                        ),
+
+
+                            
+                            ],
+                        
+
+
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 0, left: 0),
+                      child: Thermometer(humidyty: humidity)
+                        
+                        
+                        
+
+
+                      
+                      )
+                    ],
+                  ),
+                
+                ),
             ),
             const SizedBox(height: 20,),
-            //Indeks UV
+            //Pressure
             Container(
               height: 190,
               width: 180,
@@ -167,7 +228,8 @@ const CurrentContainers({ Key? key, required this.weatherData }) : super(key: ke
 
                             const SizedBox(height: 25,),
                         Text(
-                        "${weatherData?.pressure?.round()}",
+                          
+                        "${pressure.round()}",
                         style:  TextStyle(
                         color: WAColors.primaryTextColor,
                         fontSize: 30,
@@ -190,25 +252,42 @@ const CurrentContainers({ Key? key, required this.weatherData }) : super(key: ke
 
 
                       ),
-                      Padding(padding: EdgeInsets.only(top: 60, left: 0),
-                      child: CircularPercentIndicator(
-                        radius: 40,
-                        lineWidth: 10,
+                      SizedBox(width: 0,),
+                       CircularPercentIndicator(
+                        radius: 38,
+                        lineWidth: 16,
                         startAngle: 180,
-                        percent: weatherData!.pressure! / (1100+900),
+                        percent: pressure / (1100+900),
                         animation: true,
-                        animationDuration: 1200,
+                        animationDuration: 1000,
                         circularStrokeCap: CircularStrokeCap.butt,
                         backgroundColor: WAColors.iconColor1,
-                        progressColor: Colors.blue,
                         arcType: ArcType.FULL,
                         arcBackgroundColor: WAColors.backgroundColor,
+                        linearGradient: const LinearGradient(
+                          begin: Alignment.centerLeft,
+                          stops: [
+                              0.1,
+                              0.2,
+                              0.3,
+                              0.4,
+                              0.6,
+                              0.9,
+                            ],
+                            colors: [
+                            Colors.green,
+                            Colors.greenAccent,
+                            Colors.lightGreen,
+                            Colors.lightGreenAccent,
+                            Color.fromRGBO(185, 248, 152, 1),
+                            Colors.white,
+                          ],),
                         
                         
                         
 
 
-                      ),
+                      
                       )
                     ],
                   ),

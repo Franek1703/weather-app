@@ -3,51 +3,51 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 class CurrentWeather {
-  final int? lastUpdatedEpoch;
-  final double? temperatureCelsius;
-  final double? temperatureFahrenheit;
-  final double? windMph;
-  final double? windKph;
-  final String? windDirection;
-  final int? humidity;
-  final int? cloudiness;
-  final double? uv;
-  final double? fellTemperatureCelcius;
-  final String? conditionText;
-  final String? conditionIcon;
-  final int? windDegree;
-  final double? pressure;
+  final double lastUpdatedEpoch;
+  final double temperatureCelsius;
+  final double temperatureFahrenheit;
+  final double windMph;
+  final double windKph;
+  final String windDirection;
+  final double humidity;
+  final double cloudiness;
+  final double uv;
+  final double fellTemperatureCelcius;
+  final String conditionText;
+  final String conditionIcon;
+  final double windDegree;
+  final double pressure;
   CurrentWeather({
-    this.lastUpdatedEpoch,
-    this.temperatureCelsius,
-    this.temperatureFahrenheit,
-    this.windMph,
-    this.windKph,
-    this.windDirection,
-    this.humidity,
-    this.cloudiness,
-    this.uv,
-    this.fellTemperatureCelcius,
-    this.conditionText,
-    this.conditionIcon,
-    this.windDegree,
-    this.pressure
+    required this.lastUpdatedEpoch,
+    required this.temperatureCelsius,
+    required this.temperatureFahrenheit,
+    required this.windMph,
+    required this.windKph,
+    required this.windDirection,
+    required this.humidity,
+    required this.cloudiness,
+    required this.uv,
+    required this.fellTemperatureCelcius,
+    required this.conditionText,
+    required this.conditionIcon,
+    required this.windDegree,
+    required this.pressure
   });
 
   CurrentWeather copyWith({
-    int? lastUpdatedEpoch,
+    double? lastUpdatedEpoch,
     double? temperatureCelsius,
     double? temperatureFahrenheit,
     double? windMph,
     double? windKph,
     String? windDirection,
-    int? humidity,
-    int? cloudiness,
+    double? humidity,
+    double? cloudiness,
     double? uv,
     double? fellTemperatureCelcius,
     String? conditionText,
     String? conditionIcon,
-    int? windDegree,
+    double? windDegree,
     double? pressure
   }) {
     return CurrentWeather(
@@ -68,24 +68,24 @@ class CurrentWeather {
     );
   }
 
-  factory CurrentWeather.fromJson(Map<String, dynamic> json) {
-    return CurrentWeather(
-      lastUpdatedEpoch: json['current']['last_updated_epoch'],
-      temperatureCelsius: json['current']['temp_c'],
-      temperatureFahrenheit: json['current']['temp_f'],
-      windMph: json['current']['wind_mph'],
-      windKph: json['current']['wind_kph'],
-      windDirection: json['current']['wind_dir'],
-      humidity: json['current']['humidity'],
-      cloudiness: json['current']['cloud'],
-      uv: json['current']['uv'],
-      fellTemperatureCelcius: json['current']['feelslike_c'],
-      conditionText: json['current']['condition']['text'],
-      conditionIcon: json['current']['condition']['icon'],
-      windDegree: json['current']['wind_degree'],
-      pressure: json['current']['pressure_mb'],
-    );
-  }
+  // factory CurrentWeather.fromJson(Map<String, dynamic> json) {
+  //   return CurrentWeather(
+  //     lastUpdatedEpoch: json['current']['last_updated_epoch'],
+  //     temperatureCelsius: json['current']['temp_c'],
+  //     temperatureFahrenheit: json['current']['temp_f'],
+  //     windMph: json['current']['wind_mph'],
+  //     windKph: json['current']['wind_kph'],
+  //     windDirection: json['current']['wind_dir'],
+  //     humidity: json['current']['humidity'],
+  //     cloudiness: json['current']['cloud'],
+  //     uv: json['current']['uv'],
+  //     fellTemperatureCelcius: json['current']['feelslike_c'],
+  //     conditionText: json['current']['condition']['text'],
+  //     conditionIcon: json['current']['condition']['icon'],
+  //     windDegree: json['current']['wind_degree'],
+  //     pressure: json['current']['pressure_mb'],
+  //   );
+  // }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -102,11 +102,29 @@ class CurrentWeather {
       //'condition': condition.map((x) => x.toMap()).toList(),
     };
   }
+  factory CurrentWeather.fromMap(Map<String, dynamic> map) {
+    return CurrentWeather(
+      lastUpdatedEpoch: map['last_updated_epoch']?.toDouble() ?? 0.0,
+      temperatureCelsius: map['temp_c']?.toDouble() ?? 0.0,
+      temperatureFahrenheit: map['temp_f']?.toDouble() ?? 0.0,
+      windMph: map['wind_mph']?.toDouble() ?? 0.0,
+      windKph: map['wind_kph']?.toDouble() ?? 0.0,
+      windDirection: map['wind_dir'] ?? '',
+      humidity: map['humidity']?.toDouble() ?? 0.0,
+      cloudiness: map['cloud']?.toDouble() ?? 0.0,
+      uv: map['uv']?.toDouble() ?? 0.0,
+      fellTemperatureCelcius: map['feelslike_c']?.toDouble() ?? 0.0,
+      conditionText: map['condition']['text'] ?? '',
+     conditionIcon: map['condition']['icon'] ?? '',
+     windDegree: map['wind_degree']?.toDouble() ?? 0.0,
+      pressure: map['pressure_mb']?.toDouble() ?? 0.0,
+    );
+  }
 
 
   String toJson() => json.encode(toMap());
 
-  //factory CurrentWeather.fromJson(String source) => CurrentWeather.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory CurrentWeather.fromJson(String source) => CurrentWeather.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -151,62 +169,3 @@ class CurrentWeather {
       windDegree.hashCode;
   }
 }
-
-/*class Condition {
-  final String text;
-  final String icon;
-  final double code;
-  Condition({
-    required this.text,
-    required this.icon,
-    required this.code,
-  });
-
-  Condition copyWith({
-    String? text,
-    String? icon,
-    double? code,
-  }) {
-    return Condition(
-      text: text ?? this.text,
-      icon: icon ?? this.icon,
-      code: code ?? this.code,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'text': text,
-      'icon': icon,
-      'code': code,
-    };
-  }
-
-  factory Condition.fromMap(Map<String, dynamic> map) {
-    return Condition(
-      text: map['text'] ?? '',
-      icon: map['icon'] ?? '',
-      code: map['code']?.toDouble() ?? 0.0,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Condition.fromJson(String source) => Condition.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() => 'Condition(text: $text, icon: $icon, code: $code)';
-
-  @override
-  bool operator ==(covariant Condition other) {
-    if (identical(this, other)) return true;
-  
-    return 
-      other.text == text &&
-      other.icon == icon &&
-      other.code == code;
-  }
-
-  @override
-  int get hashCode => text.hashCode ^ icon.hashCode ^ code.hashCode;
-}*/

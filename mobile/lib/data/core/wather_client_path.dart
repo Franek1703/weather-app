@@ -15,29 +15,43 @@ enum WeatherClientPath{
     }
   }
 
-  Uri get baseUri => Uri(
-        scheme: 'http',
-        host: 'api.weatherapi.com',
-        path: '',
-         queryParameters:  {
+   Uri get baseUri => Uri.https(
+        'api.weatherapi.com',
+        '',
+        <String, dynamic>{
           'key': tmdbApiKey,
-        }
-    );
+          'aqi': 'no',
+        },
+      );
 
-    Uri getUri([String? query]){
-      if (query == null) {
-        return baseUri;
-      }
-       return Uri(
-        scheme: 'http',
-        host: 'api.weatherapi.com',
-        path: path,
-         queryParameters:  {
-          'key': tmdbApiKey,
-          'q': query,
-        }
-    );
-
+  Uri getUri([String? query]) {
+    if (query == null) {
+      return Uri.https(
+        baseUri.authority,
+        path,
+        baseUri.queryParameters,
+      );
     }
 
+    return Uri.https(
+      baseUri.authority,
+      WeatherClientPath.current.path,
+      <String, dynamic>{...baseUri.queryParameters, 'q': query},
+    );
+  }
+  Uri getUriforecast([String? query]) {
+    if (query == null) {
+      return Uri.http(
+        baseUri.authority,
+        path,
+        baseUri.queryParameters,
+      );
+    }
+
+    return Uri.http(
+      baseUri.authority,
+      WeatherClientPath.forecast.path,
+      <String, dynamic>{...baseUri.queryParameters, 'q': query, 'days':'2'},
+    );
+  }
 }

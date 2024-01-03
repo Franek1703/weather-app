@@ -5,28 +5,13 @@ import 'package:mobile/data/core/wather_client.dart';
 import 'package:mobile/data/current/models/current_weather.dart';
 import 'package:mobile/data/current/models/location.dart';
 
-class CurrentWeatherRepository {
-  Future<CurrentWeather> getCurrentWeather(String location) async {
-    WeatherClient client = WeatherClient();
-    final response = await client.getCurrent(location);
-    final Map<String, dynamic> body = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      return CurrentWeather.fromJson(body);
-    } else {
-      throw Exception("Failed to load API");
-    }
-  }
-}
-
-
-/*class Current {
-  final Location? location;
-  final CurrentWeather? current;
+class Current {
+  final Location location;
+  final CurrentWeather current;
 
   Current({
-    this.location,
-    this.current,
+    required this.location,
+    required this.current,
   });
 
   Current copyWith({
@@ -41,8 +26,8 @@ class CurrentWeatherRepository {
 
   Map<String, dynamic> toMap() {
     return {
-      'location': location?.toMap(),
-      'current': current?.toMap(),
+      'location': location.toMap(),
+      'current': current.toMap(),
     };
   }
 
@@ -58,7 +43,7 @@ class CurrentWeatherRepository {
   factory Current.fromJson(String source) => Current.fromMap(json.decode(source));
 
   @override
-  String toString() => 'Current(current: $current)';//'Current(location: $location, current: $current)';
+  String toString() => 'Current(location: $location, current: $current)';//'Current(location: $location, current: $current)';
 
   @override
   bool operator ==(Object other) {
@@ -71,4 +56,4 @@ class CurrentWeatherRepository {
 
   @override
   int get hashCode => current.hashCode;
-}*/
+}

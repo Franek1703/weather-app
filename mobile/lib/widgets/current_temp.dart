@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/application/core/temperature_value_object.dart';
 import 'package:mobile/data/core/models/colors.dart';
 import 'package:mobile/data/core/wather_client.dart';
 import 'package:mobile/data/current/models/current.dart';
 import 'package:mobile/data/current/models/current_weather.dart';
 
 class CurrentTemp extends StatelessWidget{
-  final CurrentWeather? weatherClient;
-
-  const CurrentTemp({ Key? key, required this.weatherClient}) : super(key: key);
+  final TemperatureValueObject temperature;
+  final String icon;
+  final String conditionText;
+  final double feelslikeTemperature;
+  final double maxTemperature;
+  final double minTemperature;
+  const CurrentTemp({ Key? key, 
+  required this.temperature,
+  required this.icon,
+  required this.conditionText,
+  required this.feelslikeTemperature,
+  required this.maxTemperature,
+  required this.minTemperature
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return  Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +40,7 @@ class CurrentTemp extends StatelessWidget{
               ),
             ),
             Text(
-              "${weatherClient?.temperatureCelsius?.round()}\u00BA",
+              "${temperature.value.round()}°C",
               style:  TextStyle(
                 color: WAColors.primaryTextColor,
                 fontSize: 60,
@@ -35,7 +48,7 @@ class CurrentTemp extends StatelessWidget{
               ),             
             ),
             //SizedBox(height: 2),
-            Text("Max.:10 Min.:0",
+            Text("Max.:${maxTemperature.round()} Min.:${minTemperature.round()}",
              style:  TextStyle(
                 color: WAColors.secondaryTextColor,
                 fontSize: 15,
@@ -43,18 +56,18 @@ class CurrentTemp extends StatelessWidget{
               ),),
           ],
         ),
-        Image.network("https:${weatherClient?.conditionIcon}"),
+        Image.network("https:$icon"),
         SizedBox(width: 60,),
 
         Column(
           children: [
-              Text("${weatherClient?.conditionText}",
+              Text(conditionText,
               style:  TextStyle(
                 color: WAColors.primaryTextColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),),
-              Text("Feels like: ${weatherClient?.fellTemperatureCelcius}",
+              Text("Feels like: $feelslikeTemperature",
               style:  TextStyle(
                 color: WAColors.secondaryTextColor,
                 fontSize: 15,
