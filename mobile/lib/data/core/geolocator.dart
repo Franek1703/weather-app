@@ -1,10 +1,6 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:mobile/data/core/base_client.dart';
-import 'package:mobile/data/core/wather_client.dart';
-import 'package:mobile/data/core/weather_data.dart';
-import 'package:mobile/data/current/models/current.dart';
 
 class GlobalControler extends GetxController{
   // create var
@@ -22,12 +18,6 @@ class GlobalControler extends GetxController{
   RxString getCity() => _city;
   RxString getSubplace() => _subplace;
 
-  //final weatherData = Current().obs;
-
-  //Current getData() {
-    //final currentWeather =   WeatherClient().getCurrent("Warszawa");
-    //return weatherData.value;
-  //}
 
   @override
   void onInit() {
@@ -89,14 +79,3 @@ class GlobalControler extends GetxController{
     return _currentIndex;
   }
 }
-// abstract class WAGetadress{
-//   String city = "";
-//   String subplace = "";
-//   final GlobalControler globalControler = Get.put(GlobalControler(), permanent: true);
-//   Future<dynamic> get() async{
-//     List<Placemark> placemark = await placemarkFromCoordinates(globalControler.getLatitude().value, globalControler.getLongitude().value);
-//     Placemark place = placemark[0];
-//       city = place.locality!;
-//       return city;
-//   }
-// }

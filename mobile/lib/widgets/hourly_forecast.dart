@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/application/forecast_weather/hourly_weather_entity.dart';
 import 'package:mobile/data/core/models/colors.dart';
-import 'package:intl/intl.dart';
 
 class HourlyForecast extends StatelessWidget {
   final List<HourlyWeatherEntity> hourly;
@@ -19,7 +18,7 @@ class HourlyForecast extends StatelessWidget {
         height: 150.0,
         margin: const EdgeInsets.only(left: 15, right: 15),
         
-        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)
+        decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10)
         
         ),
         color: WAColors.primaryColor,
@@ -30,9 +29,10 @@ class HourlyForecast extends StatelessWidget {
          itemBuilder: (context, index) {
 
             var  time = now.hour + index;
-            if (time>24){
+            if (time>=24){
               time = time - 24;
             }
+            
 
              return Container(
               margin: const EdgeInsets.only(left: 30,right: 20),
@@ -51,7 +51,7 @@ class HourlyForecast extends StatelessWidget {
                    const SizedBox(height: 15,),
                   Image.network("https:${hourly[index].icon}",
                   scale: 1.5,),
-                  Text('${time}:00')
+                  Text('${index}:00')
 
 
                 ],

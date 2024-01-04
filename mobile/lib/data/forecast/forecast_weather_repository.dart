@@ -16,5 +16,6 @@ class ForecastWeatherRepository {
     } catch (e) {
       print('EXCEPTION: $e');
     }
+    return null;
   }
 }

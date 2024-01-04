@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/application/core/temperature_value_object.dart';
 import 'package:mobile/presentation/gradient_extension.dart';
-import 'package:provider/provider.dart';
 
 class Thermometer extends StatelessWidget {
   final double humidyty;

@@ -1,6 +1,6 @@
 
 import 'package:mobile/data/forecast/models/forecastWeather.dart';
-import 'package:mobile/widgets/hourly_forecast.dart';
+
 
 class ForecastWeatherEntity{
 final double maxTemperature;

@@ -1,14 +1,7 @@
 import 'dart:convert';
-
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:mobile/data/core/base_client.dart';
 import 'package:mobile/data/core/wather_client_path.dart';
-import 'package:mobile/data/core/geolocator.dart';
-import 'package:mobile/data/core/weather_data.dart';
 import 'package:mobile/data/current/models/current.dart';
-import 'package:mobile/data/current/models/current_weather.dart';
-import 'package:mobile/data/forecast/models/forecast.dart';
 import 'package:mobile/data/forecast/models/forecastWeather.dart';
 import 'package:mobile/data/forecast/models/hourly_weather.dart';
 
@@ -25,6 +18,7 @@ class WeatherClient extends WABaseClient {
     final response = await get(WeatherClientPath.forecast.getUriforecast(location));
     var jsonResponse = json.decode(response.body);
       var data = jsonResponse['forecast']['forecastday'];
+      
 
 
 

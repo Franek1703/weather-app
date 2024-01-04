@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:math' as math;
 import 'package:mobile/application/core/wind_value_object.dart';
 import 'package:mobile/presentation/thermomentr.dart';
@@ -6,7 +5,6 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/data/core/models/colors.dart';
-import 'package:mobile/data/current/models/current_weather.dart';
 
 class CurrentContainers extends StatelessWidget {
   final WindValueObject wind;

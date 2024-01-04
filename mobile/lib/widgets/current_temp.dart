@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/application/core/temperature_value_object.dart';
 import 'package:mobile/data/core/models/colors.dart';
-import 'package:mobile/data/core/wather_client.dart';
-import 'package:mobile/data/current/models/current.dart';
-import 'package:mobile/data/current/models/current_weather.dart';
+
 
 class CurrentTemp extends StatelessWidget{
   final TemperatureValueObject temperature;

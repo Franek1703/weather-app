@@ -1,6 +1,4 @@
 
-import 'dart:convert';
-
 List<ForecastWeather> forecastFromJson(var str) => 
 List<ForecastWeather>.from(str.map((x)=>(ForecastWeather.fromJson(x))));
 
@@ -48,10 +46,10 @@ class ForecastWeather {
 
   factory ForecastWeather.fromJson(Map<String, dynamic> json) {
     return ForecastWeather(
-      maxTemp: json['day']['maxtemp_c'],
-      minTemp: json['day']['mintemp_c'],
-      humidity: json['day']['avghumidity'],
-      conditionIcon: json['day']['condition']['icon'],
+      maxTemp: json["day"]['maxtemp_c'],
+      minTemp: json["day"]['mintemp_c'],
+      humidity: json["day"]['avghumidity'],
+      conditionIcon: json["day"]['condition']['icon'],
     );
   }
 

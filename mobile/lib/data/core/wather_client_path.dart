@@ -51,7 +51,7 @@ enum WeatherClientPath{
     return Uri.http(
       baseUri.authority,
       WeatherClientPath.forecast.path,
-      <String, dynamic>{...baseUri.queryParameters, 'q': query, 'days':'2'},
+      <String, dynamic>{...baseUri.queryParameters, 'q': query, 'days':'10'},
     );
   }
 }

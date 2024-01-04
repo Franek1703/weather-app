@@ -1,5 +1,4 @@
 import 'package:mobile/data/core/wather_client.dart';
-import 'package:mobile/data/current/models/current_weather.dart';
 import 'package:mobile/data/forecast/models/hourly_weather.dart';
 
 class HourlyWeatherRepository {
@@ -17,5 +16,6 @@ class HourlyWeatherRepository {
     } catch (e) {
       print('EXCEPTION: $e');
     }
+    return null;
   }
 }
