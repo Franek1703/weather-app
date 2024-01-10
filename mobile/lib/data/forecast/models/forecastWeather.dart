@@ -7,7 +7,7 @@ class ForecastWeather {
 
   final double maxTemp;
   final double minTemp;
-  final double humidity;
+  final int humidity;
   final String conditionIcon;
   
   ForecastWeather({
@@ -23,7 +23,7 @@ class ForecastWeather {
   ForecastWeather copyWith({
     double? maxTemp,
     double? minTemp,
-    double? humidity,
+    int? humidity,
     String? conditionIcon,
   }) {
     return ForecastWeather(

@@ -27,11 +27,9 @@ import 'package:mobile/widgets/hourly_forecast.dart';
 import 'package:mobile/widgets/test.dart';
 import 'package:provider/provider.dart';
 
-
-
 void main() async {
-  //  final forecast = await WeatherClient().getHourly("Warsaw");
-  //  print(forecast);
+   final forecast = await WeatherClient().getForecast("Warsaw");
+   print(forecast);
   runApp(
     Provider(
       create: (context) => WeatherClient(),
@@ -47,16 +45,16 @@ void main() async {
             create: (context) => HourlyWeatherRepository(
               client: context.read<WeatherClient>(),
             ),
-            child: MainApp(),
+            child: const MainApp(),
           ),
         ),
       ),
     ),
   );
-  final weather = ForecastBloc(
-      repository: ForecastWeatherRepository(client: WeatherClient()),
-      repositoryHourly: HourlyWeatherRepository(client: WeatherClient()));
-  weather.add(ForecastEvent(location: "Warsaw"));
+  // final weather = ForecastBloc(
+  //     repository: ForecastWeatherRepository(client: WeatherClient()),
+  //     repositoryHourly: HourlyWeatherRepository(client: WeatherClient()));
+  // weather.add(ForecastEvent(location: "Warsaw"));
 }
 
 class MainApp extends HookWidget {
@@ -90,7 +88,8 @@ class MainApp extends HookWidget {
 
     return null;
   }
-   List<HourlyWeatherEntity>? getHourlytWeather(
+
+  List<HourlyWeatherEntity>? getHourlytWeather(
       {required ForecastWeatherState from}) {
     final state = from;
 
@@ -120,257 +119,241 @@ class MainApp extends HookWidget {
             if (snap.hasData) {
               if (isLocationTrue.value) {
                 textEditingController.text = globalControler.getCity().value;
+                print(globalControler.getCity().value);
               }
-              return BlocProvider(
-                create: (context) => CurrentWeatherBloc(
-                  repository: context.read<CurrentWeatherRepository>(),
-                )..add(
-                    QueryForLocationEvent(location: snap.requireData),
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => CurrentWeatherBloc(
+                      repository: context.read<CurrentWeatherRepository>(),
+                    )..add(
+                        QueryForLocationEvent(location: snap.requireData),
+                      ),
                   ),
+                  BlocProvider(
+                      create: (contextForecast) => ForecastBloc(
+                          repository:
+                              contextForecast.read<ForecastWeatherRepository>(),
+                          repositoryHourly:
+                              contextForecast.read<HourlyWeatherRepository>())
+                        ..add(
+                          ForecastEvent(location: snap.requireData),
+                        ),
+                  ),
+                ],
                 child: BlocBuilder<CurrentWeatherBloc, CurrentWeatherState>(
                     builder: (context, state) {
                   final weather = getWeather(from: state);
 
-                  return BlocProvider(
-                      create: (contextForecast) => ForecastBloc(
-                          repository:
-                              contextForecast.read<ForecastWeatherRepository>(),
-                              repositoryHourly: contextForecast.read<HourlyWeatherRepository>())
-                        ..add(
-                          ForecastEvent(location: snap.requireData),
-                        ),
-                      child: BlocBuilder<ForecastBloc, ForecastWeatherState>(
+                  
+                      return BlocBuilder<ForecastBloc, ForecastWeatherState>(
                         builder: (contextForecast, stateForecast) {
-                          final forecast = getForecastWeather(from: stateForecast);
-                              final hourly = getHourlytWeather(from: stateForecast);
-                              
-                          return Scaffold(
-                            extendBodyBehindAppBar: true,
-                            appBar: AppBar(
-                              backgroundColor: Colors.transparent,
-                              // elevation: 0,
-                              systemOverlayStyle: const SystemUiOverlayStyle(
-                                  statusBarBrightness: Brightness.dark),
-                            ),
-                            backgroundColor: WAColors.backgroundColor,
-                            body: Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                  0, 1.2 * kToolbarHeight, 0, 20),
-                              // child: Obx(
-                              //   () => globalControler.checkLoading().isTrue
-                              //       ? const Center(child: CircularProgressIndicator()):
-                              child: SizedBox(
-                                height: MediaQuery.of(context).size.height,
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      alignment:
-                                          const AlignmentDirectional(3, -0.3),
-                                      child: Container(
-                                        height: 300,
-                                        width: 300,
-                                        decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.deepPurple),
+                          final forecast =
+                              getForecastWeather(from: stateForecast);
+                          
+                          final hourly = getHourlytWeather(from: stateForecast);
+                          
+                         
+                            return Scaffold(
+                              extendBodyBehindAppBar: true,
+                              appBar: AppBar(
+                                backgroundColor: Colors.transparent,
+                                // elevation: 0,
+                                systemOverlayStyle: const SystemUiOverlayStyle(
+                                    statusBarBrightness: Brightness.dark),
+                              ),
+                              backgroundColor: WAColors.backgroundColor,
+                              body: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    0, 1.2 * kToolbarHeight, 0, 20),
+                                // child: Obx(
+                                //   () => globalControler.checkLoading().isTrue
+                                //       ? const Center(child: CircularProgressIndicator()):
+                                child: SizedBox(
+                                  height: MediaQuery.of(context).size.height,
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment:
+                                            const AlignmentDirectional(3, -0.3),
+                                        child: Container(
+                                          height: 300,
+                                          width: 300,
+                                          decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.deepPurple),
+                                        ),
                                       ),
-                                    ),
-                                    Align(
-                                      alignment:
-                                          const AlignmentDirectional(-3, -0.3),
-                                      child: Container(
-                                        height: 300,
-                                        width: 300,
-                                        decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(0xFF673AB7)),
+                                      Align(
+                                        alignment: const AlignmentDirectional(
+                                            -3, -0.3),
+                                        child: Container(
+                                          height: 300,
+                                          width: 300,
+                                          decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF673AB7)),
+                                        ),
                                       ),
-                                    ),
-                                    Align(
-                                      alignment:
-                                          const AlignmentDirectional(0, -1.2),
-                                      child: Container(
-                                        height: 300,
-                                        width: 600,
-                                        decoration: const BoxDecoration(
-                                            color: Color(0xFFFFAB40)),
+                                      Align(
+                                        alignment:
+                                            const AlignmentDirectional(0, -1.2),
+                                        child: Container(
+                                          height: 300,
+                                          width: 600,
+                                          decoration: const BoxDecoration(
+                                              color: Color(0xFFFFAB40)),
+                                        ),
                                       ),
-                                    ),
-                                    BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                          sigmaX: 100.0, sigmaY: 100.0),
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                            color: Colors.transparent),
+                                      BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                            sigmaX: 100.0, sigmaY: 100.0),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              color: Colors.transparent),
+                                        ),
                                       ),
-                                    ),
-                                    SingleChildScrollView(
                                       
-                                      child: Column(
-                                        // mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                left: 20, right: 20, top: 0),
-                                            alignment: Alignment.centerLeft,
-                                            padding: isLocationTrue.value
-                                                ? const EdgeInsets.only(
-                                                    left: 15, right: 15)
-                                                : const EdgeInsets.only(
-                                                    left: 9, right: 15),
-                                            height: 50,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                                color: WAColors.primaryColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            child: Row(
-                                              children: [
-                                                if (isLocationTrue.value) ...[
-                                                  const Icon(
-                                                    Icons.location_on_outlined,
-                                                    size: 30,
-                                                  ),
-                                                ],
-                                                if (isLocationTrue.value ==
-                                                    false) ...[
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      textEditingController
-                                                              .text =
-                                                          globalControler
-                                                              .getCity()
-                                                              .value;
-                                                      isLocationTrue.value =
-                                                          true;
-                                                      context
-                                                          .read<
-                                                              CurrentWeatherBloc>()
-                                                          .add(
-                                                            QueryForLocationEvent(
-                                                                location: snap
-                                                                    .requireData),
-                                                          );
-                                                          contextForecast
-                                                          .read<
-                                                              ForecastBloc>()
-                                                          .add(
-                                                            ForecastEvent(
-                                                                location: snap
-                                                                    .requireData),
-                                                          );
-                                                    },
-                                                    icon: const Icon(
+                                      SingleChildScrollView(
+                                        child: Column(
+                                          // mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 20, right: 20, top: 0),
+                                              alignment: Alignment.centerLeft,
+                                              padding: isLocationTrue.value
+                                                  ? const EdgeInsets.only(
+                                                      left: 15, right: 15)
+                                                  : const EdgeInsets.only(
+                                                      left: 9, right: 15),
+                                              height: 50,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                  color: WAColors.primaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30)),
+                                              child: Row(
+                                                children: [
+                                                  if (isLocationTrue.value) ...[
+                                                    const Icon(
                                                       Icons
-                                                          .location_off_outlined,
-                                                      size: 28,
+                                                          .location_on_outlined,
+                                                      size: 30,
+                                                    ),
+                                                  ],
+                                                  if (isLocationTrue.value ==
+                                                      false) ...[
+                                                    IconButton(
+                                                      onPressed: () {
+                                                        textEditingController
+                                                                .text =
+                                                            globalControler
+                                                                .getCity()
+                                                                .value;
+                                                        isLocationTrue.value =
+                                                            true;
+                                                        context
+                                                            .read<
+                                                                CurrentWeatherBloc>()
+                                                            .add(
+                                                              QueryForLocationEvent(
+                                                                  location: snap
+                                                                      .requireData),
+                                                            );
+                                                        contextForecast
+                                                            .read<
+                                                                ForecastBloc>()
+                                                            .add(
+                                                              ForecastEvent(
+                                                                  location: snap
+                                                                      .requireData),
+                                                            );
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .location_off_outlined,
+                                                        size: 28,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Expanded(
+                                                    child: TextField(
+                                                      controller:
+                                                          textEditingController,
                                                     ),
                                                   ),
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      if (textEditingController
+                                                              .text !=
+                                                          snap.requireData) {
+                                                        final location =
+                                                            textEditingController
+                                                                .text;
+                                                        isLocationTrue.value =
+                                                            false;
+
+                                                        context
+                                                            .read<
+                                                                CurrentWeatherBloc>()
+                                                            .add(
+                                                              QueryForLocationEvent(
+                                                                  location:
+                                                                      location),
+                                                            );
+                                                        contextForecast
+                                                            .read<
+                                                                ForecastBloc>()
+                                                            .add(
+                                                              ForecastEvent(
+                                                                  location:
+                                                                      location),
+                                                            );
+                                                      }
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.search),
+                                                  )
                                                 ],
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Expanded(
-                                                  child: TextField(
-                                                    controller:
-                                                        textEditingController,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    if (textEditingController
-                                                            .text !=
-                                                        snap.requireData) {
-                                                      final location =
-                                                          textEditingController
-                                                              .text;
-                                                      isLocationTrue.value =
-                                                          false;
-
-                                                      context
-                                                          .read<
-                                                              CurrentWeatherBloc>()
-                                                          .add(
-                                                            QueryForLocationEvent(
-                                                                location:
-                                                                    location),
-                                                          );
-                                                          contextForecast
-                                                          .read<
-                                                              ForecastBloc>()
-                                                          .add(
-                                                            ForecastEvent(
-                                                                location: location),
-                                                          );
-                                                    }
-                                                  },
-                                                  icon:
-                                                      const Icon(Icons.search),
-                                                )
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          CurrentTemp(
-                                              temperature: weather
-                                                      ?.temperatureC ??
-                                                  const TemperatureValueObject(
-                                                      value: 0,
-                                                      unit: TemperatureUnit
-                                                          .celsius),
-                                              icon: weather?.conditionIcon ??
-                                                  '//cdn.weatherapi.com/weather/64x64/day/302.png',
-                                              conditionText:
-                                                  weather?.conditionText ?? '',
-                                              feelslikeTemperature: weather
-                                                      ?.fellTemperatureCelcius ??
-                                                  0,
-                                              maxTemperature:
-                                                  forecast?[0].maxTemperature ??
-                                                      0,
-                                              minTemperature:
-                                                  forecast?[0].minTemperature ??
-                                                      0),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text("Today",
-                                              //textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: WAColors
-                                                      .primaryTextColor,
-                                                  fontSize: 20,
-                                                  fontWeight:
-                                                      FontWeight.bold)),
-                                                      const SizedBox(height: 10,),
-                                           HourlyForecast(hourly: hourly ?? []),
-                                           const SizedBox(height: 20,),
-                                           
-
-                                            Text("Forecast",
-                                              //textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: WAColors
-                                                      .primaryTextColor,
-                                                  fontSize: 20,
-                                                  fontWeight:
-                                                      FontWeight.bold)),
-                                           
-                                            // Forecast(forecast: forecast ?? []),
-                                            Forecast(forecast: forecast ?? []),
-                                          
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: Text("Current weather",
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            CurrentTemp(
+                                                temperature: weather
+                                                        ?.temperatureC ??
+                                                    const TemperatureValueObject(
+                                                        value: 0,
+                                                        unit: TemperatureUnit
+                                                            .celsius),
+                                                icon: weather?.conditionIcon ??
+                                                    '//cdn.weatherapi.com/weather/64x64/day/302.png',
+                                                conditionText:
+                                                    weather?.conditionText ??
+                                                        '',
+                                                feelslikeTemperature: weather
+                                                        ?.fellTemperatureCelcius ??
+                                                    0,
+                                                maxTemperature: forecast?[0]
+                                                        .maxTemperature ??
+                                                    0,
+                                                minTemperature: forecast?[0]
+                                                        .minTemperature ??
+                                                    0),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text("Today",
                                                 //textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                     color: WAColors
@@ -378,43 +361,84 @@ class MainApp extends HookWidget {
                                                     fontSize: 20,
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          CurrentContainers(
-                                            wind: weather?.windKph ??
-                                                const WindValueObject(
-                                                    value: 0,
-                                                    unit: WindUnit
-                                                        .kilometersPerHour),
-                                            pressure: weather?.pressure ?? 0,
-                                            uv: weather?.uv ?? 0,
-                                            windDegree:
-                                                weather?.windDegree ?? 0,
-                                            windDirection:
-                                                weather?.windDirection ?? '',
-                                            humidity: weather?.humidity ?? 0,
-                                          ),
-                                          //  SizedBox(height: 100),
-                                          //   Thermometer(
-                                          //     temperature: weather?.temperatureC ??
-                                          //      const TemperatureValueObject(value: 0, unit:TemperatureUnit.celsius),
-                                          //   ),
-                                        ],
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            HourlyForecast(
+                                                hourly: hourly ?? []),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+
+                                            Text("Forecast",
+                                                //textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                    color: WAColors
+                                                        .primaryTextColor,
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+
+                                            // Forecast(forecast: forecast ?? []),
+                                            Forecast(forecast: forecast ?? []),
+
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15),
+                                              child: Text("Current weather",
+                                                  //textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color: WAColors
+                                                          .primaryTextColor,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            CurrentContainers(
+                                              wind: weather?.windKph ??
+                                                  const WindValueObject(
+                                                      value: 0,
+                                                      unit: WindUnit
+                                                          .kilometersPerHour),
+                                              pressure: weather?.pressure ?? 0,
+                                              uv: weather?.uv ?? 0,
+                                              windDegree:
+                                                  weather?.windDegree ?? 0,
+                                              windDirection:
+                                                  weather?.windDirection ?? '',
+                                              humidity: weather?.humidity ?? 0,
+                                            ),
+                                            //  SizedBox(height: 100),
+                                            //   Thermometer(
+                                            //     temperature: weather?.temperatureC ??
+                                            //      const TemperatureValueObject(value: 0, unit:TemperatureUnit.celsius),
+                                            //   ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    if (state is CurrentWeatherLoading)
-                                      const Center(
-                                          child: CircularProgressIndicator())
-                                  ],
+                                      if (state is CurrentWeatherLoading || stateForecast is ForecastWeatherLoading)
+                                        const Center(
+                                            child: CircularProgressIndicator()),
+                                     
+                                      
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            // ),
-                          );
+                              // ),
+                            );
+                          // } else {
+                          //   return const Center(
+                          //       child: CircularProgressIndicator());
+                          // }
                         },
-                      ));
+                      );
                 }),
               );
             } else {

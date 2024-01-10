@@ -21,7 +21,7 @@ class WeatherClient extends WABaseClient {
       
 
 
-
+    
     return forecastFromJson(data);
   }
 

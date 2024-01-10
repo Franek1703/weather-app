@@ -5,7 +5,7 @@ import 'package:mobile/data/forecast/models/forecastWeather.dart';
 class ForecastWeatherEntity{
 final double maxTemperature;
 final double minTemperature;
-final double humidity;
+final int humidity;
 final String icon;
 
   ForecastWeatherEntity({required this.maxTemperature, required this.minTemperature, required this.humidity, required this.icon});

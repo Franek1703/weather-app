@@ -65,7 +65,7 @@ class CurrentTemp extends StatelessWidget{
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),),
-              Text("Feels like: $feelslikeTemperature",
+              Text("Feels like: $feelslikeTemperature°",
               style:  TextStyle(
                 color: WAColors.secondaryTextColor,
                 fontSize: 15,
