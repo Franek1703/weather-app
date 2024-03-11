@@ -19,11 +19,11 @@ To create a weather mobile app, using the free weatherapi.com API. The app allow
 
 Displayed information includes the current temperature, maximum and minimum temperatures for the day, and the feels like temperature. The weather icon and a brief description also change based on the current weather conditions. Hourly temperatures and weather icons for the day are presented below. The weather forecast covers 3 days, showing the weather icon, maximum and minimum temperatures for each day. Charts for current atmospheric conditions include wind speed, humidity, UV index, and pressure.
 
-![ScreenShot1](./ScreenShot/location_on1.png)
+![ScreenShot1](./ScreenShots/location_on1.png)
 
-![ScreenShot2](./ScreenShot/location_on2.png)
+![ScreenShot2](./ScreenShots/location_on2.png)
 
-![ScreenShot3](./ScreenShot/location_off.png)
+![ScreenShot3](./ScreenShots/location_off.png)
 
 ### Setup
 
